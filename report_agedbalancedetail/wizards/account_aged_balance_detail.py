@@ -7,6 +7,10 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from openerp.exceptions import UserError
 
+import logging
+_logger = logging.getLogger(__name__)
+
+
 class account_aged_trial_balance_detail(models.TransientModel):
     _inherit = 'account.common.partner.report'
     _name = 'account.aged.balance.detail'
@@ -24,10 +28,20 @@ class account_aged_trial_balance_detail(models.TransientModel):
         res = {}
 
         data = self.pre_print_report(data)
-        data['form'].update(self.read(['period_length', 'direction_selection', 'company_id'])[0])
 
+        # Filter only on sale and purchase journals
+        data['form'].update(self.read(['period_length', 'direction_selection', 'company_id'])[0])
+        selected_journal_ids = data['form']['journal_ids']
+        only_sales_purchase_journal_ids = []
+        for journal_id in selected_journal_ids:
+            journal = self.env['account.journal'].search([['id', '=', journal_id]])
+            if journal.type == 'sale' or journal.type == 'purchase':
+                only_sales_purchase_journal_ids.append(journal_id)
+        data['form']['journal_ids'] = only_sales_purchase_journal_ids
+        data['form']['used_context']['journal_ids'] = only_sales_purchase_journal_ids
+        
         period_length = data['form']['period_length']
-        if period_length<=0:
+        if period_length <= 0:
             raise UserError(_('User Error!'), _('You must set a period length greater than 0.'))
         if not data['form']['date_from']:
             raise UserError(_('User Error!'), _('You must set a start date.'))
@@ -38,22 +52,23 @@ class account_aged_trial_balance_detail(models.TransientModel):
             for i in range(5)[::-1]:
                 stop = start - relativedelta(days=period_length)
                 res[str(i)] = {
-                    'name': (i!=0 and (str((5-(i+1)) * period_length) + '-' + str((5-i) * period_length)) or ('+'+str(4 * period_length))),
+                    'name': (i != 0 and (str((5 - (i + 1)) * period_length) + '-' + str((5 - i) * period_length)) or ('+' + str(4 * period_length))),
                     'stop': start.strftime('%Y-%m-%d'),
-                    'start': (i!=0 and stop.strftime('%Y-%m-%d') or False),
+                    'start': (i != 0 and stop.strftime('%Y-%m-%d') or False),
                 }
                 start = stop - relativedelta(days=1)
         else:
             for i in range(5):
                 stop = start + relativedelta(days=period_length)
-                res[str(5-(i+1))] = {
-                    'name': (i!=4 and str((i) * period_length)+'-' + str((i+1) * period_length) or ('+'+str(4 * period_length))),
+                res[str(5 - (i + 1))] = {
+                    'name': (i != 4 and str((i) * period_length) + '-' + str((i + 1) * period_length) or ('+' + str(4 * period_length))),
                     'start': start.strftime('%Y-%m-%d'),
-                    'stop': (i!=4 and stop.strftime('%Y-%m-%d') or False),
+                    'stop': (i != 4 and stop.strftime('%Y-%m-%d') or False),
                 }
                 start = stop + relativedelta(days=1)
+
         data['form'].update(res)
         if data.get('form',False):
-            data['ids']=[data['form'].get('chart_account_id',False)]
+            data['ids'] = [data['form'].get('chart_account_id',False)]
 
         return self.env['report'].get_action(self, 'report_agedbalancedetail.report_agedbalancedetail', data=data)
