@@ -26,11 +26,13 @@ class invoice_line_with_custom_create(models.Model):
                         applicable_taxes.append(tax.id)
 
             # Convert to other taxes if invoice (and so partner) has a specific fiscal position
+            applied_taxes =[]
             for tax in applicable_taxes:
                 for rule in invoice.fiscal_position_id.tax_ids:
                     if tax == rule.tax_src_id.id:
                         applicable_taxes.remove(tax)
-                        applicable_taxes.append(rule.tax_dest_id.id)
+                        applied_taxes.append(rule.tax_dest_id.id)
                         break
-            values['invoice_line_tax_ids'] = [[6, None, applicable_taxes]]
+
+            values['invoice_line_tax_ids'] = [[6, None, applied_taxes]]
         return super(invoice_line_with_custom_create, self).create(values)
