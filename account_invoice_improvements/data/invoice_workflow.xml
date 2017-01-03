@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="account.act_open" model="workflow.activity">
+            <field name="wkf_id" ref="account.wkf" />
+            <field name="name">open</field>
+            <field name="kind">function</field>
+            <field name="action">
+                check_validate_and_send_invoice_if_out()
+            </field>
+        </record>
+    </data>
+</openerp>
