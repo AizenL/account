@@ -9,6 +9,8 @@ class account_invoice_improved(models.Model):
     _inherit = ['account.invoice']
 
     next_invoice_number = fields.Char(compute='_compute_next_invoice_number', string="Next document number", store=False)
+    comment = fields.Html('Additional Information', readonly=True, states={'draft': [('readonly', False)]})
+
 
     @api.one
     @api.depends('journal_id')
