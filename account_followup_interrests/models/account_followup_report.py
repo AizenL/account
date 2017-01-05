@@ -36,7 +36,8 @@ class report_account_followup_report(models.AbstractModel):
         for l in context_id.partner_id.unreconciled_aml_ids:
             if public and l.blocked:
                 continue
-            if l.amount < 0:
+            amount = l.currency_id and l.amount_residual_currency or l.amount_residual
+            if amount < 0:
                 continue
             currency = l.currency_id or l.company_id.currency_id
             if currency not in res:
