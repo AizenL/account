@@ -6,7 +6,7 @@
         <!--Email template -->
         <record id="account_remittance_advice_mail_template" model="mail.template">
             <field name="name">Remittance Advice Email</field>
-            <field name="subject">${object.company_id.name|safe}: ${object.move_line_id.invoice_id.reference|safe} Remittance Advice</field>
+            <field name="subject">${object.company_id.name|safe}: Remittance Advice ${object.move_line_id.invoice_id.reference|safe} </field>
             <field name="partner_to">${object.partner_id.id}</field>
             <field name="model_id" ref="account_payment_structured_communication.model_account_payment_line"/>
             <field name="auto_delete" eval="True"/>
