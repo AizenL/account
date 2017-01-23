@@ -6,7 +6,7 @@
         <!--Email template -->
         <record id="account_remittance_advice_mail_template" model="mail.template">
             <field name="name">Remittance Advice Email</field>
-            <field name="subject">${object.company_id.name|safe}: Remittance Advice ${object.move_line_id.invoice_id.reference|safe} </field>
+            <field name="subject">${object.company_id.name|safe}: Remittance Advice ${object.move_line_id.invoice_id.supplier_reference|safe} </field>
             <field name="partner_to">${object.partner_id.id}</field>
             <field name="model_id" ref="account_payment_structured_communication.model_account_payment_line"/>
             <field name="auto_delete" eval="True"/>
@@ -24,7 +24,7 @@
 
         <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><strong style="font-weight:bold;">Supplier Name: </strong>${object.partner_id.name}</p>
 
-        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><strong style="font-weight:bold;">Invoice Reference: </strong>${object.move_line_id.invoice_id.reference}</p>
+        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><strong style="font-weight:bold;">Invoice Reference: </strong>${object.move_line_id.invoice_id.supplier_reference}</p>
 
         <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><strong style="font-weight:bold;">Payment Date: </strong>${object.date}</p>
 

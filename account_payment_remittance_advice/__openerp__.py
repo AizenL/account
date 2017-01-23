@@ -4,6 +4,7 @@
     'depends': [
         'account_payment_order',
         'account_payment_partner',
+        'account_payment_structured_communication', 
     ],
     'author': "Valentin THIRION, AbAKUS it-solutions SARL",
     'website': "http://www.abakusitsolutions.eu",
