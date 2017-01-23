@@ -9,6 +9,7 @@
                 <xpath expr="//field[@name='reference']" position="replace">
                     <field name="reference_type" />
                     <field name="reference" />
+                    <field name="supplier_reference" attrs="{'invsible': [('type','=', 'in_invoice'), ('type', '=', 'out_invoice')]}"/>
                 </xpath>
             </field>
         </record>
