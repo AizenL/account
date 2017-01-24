@@ -37,8 +37,6 @@ class report_account_followup_report(models.AbstractModel):
             if public and l.blocked:
                 continue
             amount = l.currency_id and l.amount_residual_currency or l.amount_residual
-            if amount < 0:
-                continue
             currency = l.currency_id or l.company_id.currency_id
             if currency not in res:
                 res[currency] = []
@@ -64,10 +62,16 @@ class report_account_followup_report(models.AbstractModel):
                     date_due = (date_due, 'color: red;')
                 if is_payment:
                     date_due = ''
-                late_days = aml.late_days > 0 and aml.late_days or 0
-                allowances = formatLang(self.env, aml.payments_allowances, currency_obj=currency)
-                interests = formatLang(self.env, aml.payments_interests, currency_obj=currency)
-                total_due = formatLang(self.env, float(amount + aml.payments_interests + aml.payments_allowances), currency_obj=currency)
+
+                late_days = 0
+                allowances = formatLang(self.env, 0, currency_obj=currency)
+                interests = formatLang(self.env, 0, currency_obj=currency)
+                total_due = formatLang(self.env, float(amount), currency_obj=currency)
+                if amount > 0:
+                    late_days = aml.late_days > 0 and aml.late_days or 0
+                    allowances = formatLang(self.env, aml.payments_allowances, currency_obj=currency)
+                    interests = formatLang(self.env, aml.payments_interests, currency_obj=currency)
+                    total_due = formatLang(self.env, float(amount + aml.payments_interests + aml.payments_allowances), currency_obj=currency)
                 amount = formatLang(self.env, amount, currency_obj=currency)
                 
                 line_num += 1
