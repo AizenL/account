@@ -45,18 +45,19 @@ class account_asset_improved(models.Model):
             if self.method == 'linear':
                 
                 amount = amount_to_depr / (undone_dotation_number - len(posted_depreciation_line_ids))
-                _logger.debug("Amount to depr= %s | Undone dot numb = %s | len = %s | Amount = %s", amount_to_depr, undone_dotation_number, len(posted_depreciation_line_ids), amount)
+                #_logger.debug("Amount to depr= %s | Undone dot numb = %s | len = %s | Amount = %s", amount_to_depr, undone_dotation_number, len(posted_depreciation_line_ids), amount)
                 if self.prorata:
                     amount = amount_to_depr / self.method_number
-                    if sequence == 1:
+                    # Test if first year
+                    if depreciation_date < self.company_id.compute_fiscalyear_dates(datetime.strptime(self.date, DF).date())['date_to']:
                         if self.method_period % 12 != 0:
-                            date = datetime.strptime(self.date, '%Y-%m-%d')
-                            month_days = calendar.monthrange(date.year, date.month)[1]
-                            days = month_days - date.day + 1
-                            amount = (amount_to_depr / self.method_number) / month_days * days
+                            # Get the number of months left in this fiscal year and divide the yealy amount by the left months
+                            months_left = relativedelta(self.company_id.compute_fiscalyear_dates(depreciation_date)['date_to'], datetime.strptime(self.date, DF).date()).months + 1 #because it gives values from 0 to 11
+                            amount = (self.value / (self.method_number / 12)) / months_left
                         else:
                             days = (self.company_id.compute_fiscalyear_dates(depreciation_date)['date_to'] - depreciation_date).days + 1
                             amount = (amount_to_depr / self.method_number) / total_days * days
+
             elif self.method == 'degressive':
                 amount = residual_amount * self.method_progress_factor
                 if self.prorata:
@@ -128,7 +129,11 @@ class account_asset_improved(models.Model):
 
             #last_already_depreciated_value = 0
             #if self.asset_already_partially_depreciated:
-            last_already_depreciated_value = self.value - posted_depreciation_line_ids[-1].remaining_value
+            if len(posted_depreciation_line_ids) > 0:
+                last_already_depreciated_value = self.value - posted_depreciation_line_ids[-1].remaining_value
+            else:
+                last_already_depreciated_value = 0
+            
             
             for x in range(len(posted_depreciation_line_ids), undone_dotation_number):
                 
@@ -191,5 +196,3 @@ class account_asset_improved(models.Model):
         self.write({'depreciation_line_ids': commands})
 
         return True
-
-    
