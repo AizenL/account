@@ -142,54 +142,54 @@ class be_vat_checks(models.TransientModel):
             text += "   => ERROR\n"
 
         # Check 13
-        text += "13) : [55] = ([84] + [86] + [88]) * 0.21"
+        text += "13) : [55] <= ([84] + [86] + [88]) * 0.21"
         balance_55 = self.get_balance_for_domain(domain_55)
         balance_84 = round(self.get_balance_for_domain(domain_84), 2)
         balance_86 = round(self.get_balance_for_domain(domain_86), 2)
         balance_88 = round(self.get_balance_for_domain(domain_88), 2)
-        if (balance_55 == ((balance_84 + balance_86 + balance_88) * 0.21)):
+        if (balance_55 <= ((balance_84 + balance_86 + balance_88) * 0.21)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
 
         # Check 14
-        text += "14) : [56] + [57] = ([85] + [87]) * 0.21"
-        balance_56 = self.get_balance_for_domain(domain_56)
-        balance_57 = self.get_balance_for_domain(domain_57)
+        text += "14) : [56] + [57] <= ([85] + [87]) * 0.21"
+        balance_56 = round(self.get_balance_for_domain(domain_56), 2)
+        balance_57 = round(self.get_balance_for_domain(domain_57), 2)
         balance_85 = round(self.get_balance_for_domain(domain_85), 2)
         balance_87 = round(self.get_balance_for_domain(domain_87), 2)
-        if (balance_56 + balance_57 == ((balance_85 + balance_87) * 0.21)):
+        if (balance_56 + balance_57 <= round(((balance_85 + balance_87) * 0.21), 2)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
 
         # Check 15
-        text += "15) : [59] = ([81] + [82] + [83] + [84] + [85]) * 0.21"
+        text += "15) : [59] <= ([81] + [82] + [83] + [84] + [85]) * 0.21"
         balance_59 = self.get_balance_for_domain(domain_59)
         balance_81 = round(self.get_balance_for_domain(domain_81), 2)
         balance_82 = round(self.get_balance_for_domain(domain_82), 2)
         balance_83 = round(self.get_balance_for_domain(domain_83), 2)
         balance_84 = round(self.get_balance_for_domain(domain_84), 2)
         balance_85 = round(self.get_balance_for_domain(domain_85), 2)
-        if (balance_59 == ((balance_81 + balance_82 + balance_83 + balance_84 + balance_85) * 0.21)):
+        if (balance_59 <= ((balance_81 + balance_82 + balance_83 + balance_84 + balance_85) * 0.21)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
 
         # Check 16
-        text += "16) : [63] = [85] * 0.21"
+        text += "16) : [63] <= [85] * 0.21"
         balance_63 = self.get_balance_for_domain(domain_63)
         balance_85 = round(self.get_balance_for_domain(domain_85), 2)
-        if (balance_63 == (balance_85 * 0.21)):
+        if (balance_63 <= (balance_85 * 0.21)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
 
         # Check 17
-        text += "17) : [64] = [49] * 0.21"
+        text += "17) : [64] <= [49] * 0.21"
         balance_64 = self.get_balance_for_domain(domain_64)
         balance_49 = round(self.get_balance_for_domain(domain_49), 2)
-        if (balance_64 == (balance_49 * 0.21)):
+        if (balance_64 <= (balance_49 * 0.21)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
