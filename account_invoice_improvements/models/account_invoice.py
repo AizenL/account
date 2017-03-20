@@ -60,6 +60,10 @@ class account_invoice_improved(models.Model):
             if len(line.invoice_line_tax_ids) == 0:
                 raise ValidationError('No tax! - A line in this invoice does not contain any tax. This is not allowed by the system. Please, correct this.')
                 self.write({'state': 'draft'})
+            # Check if there is more than one tax on each line
+            if len(line.invoice_line_tax_ids) > 1:
+                raise ValidationError('Multiple taxes for one line! - A line in this invoice contains more than one tax. This is not allowed by the system. Please, correct this.')
+                self.write({'state': 'draft'})
             # Check if there is an analytic account on each line
             if len(line.account_analytic_id) == 0:
                 raise ValidationError('No Analytic Account! - A line in this invoice does not contain an analytic account. This is not allowed by the system. Please, correct this.')
