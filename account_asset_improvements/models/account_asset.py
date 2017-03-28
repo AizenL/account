@@ -49,7 +49,7 @@ class account_asset_improved(models.Model):
                 if self.prorata:
                     amount = amount_to_depr / self.method_number
                     # Test if first year
-                    if depreciation_date < self.company_id.compute_fiscalyear_dates(datetime.strptime(self.date, DF).date())['date_to']:
+                    if depreciation_date <= self.company_id.compute_fiscalyear_dates(datetime.strptime(self.date, DF).date())['date_to']:
                         if self.method_period % 12 != 0:
                             # Get the number of months left in this fiscal year and divide the yealy amount by the left months
                             months_left = relativedelta(self.company_id.compute_fiscalyear_dates(depreciation_date)['date_to'], datetime.strptime(self.date, DF).date()).months + 1 #because it gives values from 0 to 11
