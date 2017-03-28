@@ -16,8 +16,18 @@ class account_asset_improved(models.Model):
 
     asset_already_partially_depreciated = fields.Boolean('Asset already partially depreciated')
     already_passed_depreciations = fields.Integer('Passed depreciations')
-    
 
+    @api.one
+    @api.onchange('category_id')
+    def _edit_depreciation_settings(self):
+        if self.state == "draft":
+            if self.category_id:
+                self.method_time = self.category_id.method_time
+                self.method_number = self.category_id.method_number
+                self.method_period = self.category_id.method_period
+                self.method = self.category_id.method
+                self.prorata = self.category_id.prorata
+                
     @api.one
     @api.depends('value', 'salvage_value', 'depreciation_line_ids.move_check', 'depreciation_line_ids.amount')
     def _amount_residual(self):

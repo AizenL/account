@@ -1,6 +1,6 @@
 {
     'name': "Account Assets Management Improvements",
-    'version': '9.0.1.0.1',
+    'version': '9.0.1.0.2',
     'depends': ['account_asset'],
     'author': "Valentin THIRION, AbAKUS it-solutions SARL",
     'website': "http://www.abakusitsolutions.eu",
