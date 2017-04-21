@@ -16,10 +16,6 @@ class be_vat_checks(models.TransientModel):
 
     @api.multi
     def compute_cheks(self):
-        _logger.debug("DO THE CHECKS")
-
-        #lines = self.env['account.move.line'].search([['date', '=>', self.date_from], ['date', '<=', self.date_to]])
-
         # domains
         domain_01 = self.get_domain_for_code('BETAX01')
         domain_02 = self.get_domain_for_code('BETAX02')
@@ -180,7 +176,7 @@ class be_vat_checks(models.TransientModel):
         text += "16) : [63] <= [85] * 0.21"
         balance_63 = self.get_balance_for_domain(domain_63)
         balance_85 = round(self.get_balance_for_domain(domain_85), 2)
-        if (balance_63 <= (balance_85 * 0.21)):
+        if (balance_63 <= (round(balance_85 * 0.21), 2)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
@@ -222,4 +218,6 @@ class be_vat_checks(models.TransientModel):
         balance = 0
         for line in lines:
             balance += line.balance
+        if balance < 0:
+            balance = balance * -1
         return balance
