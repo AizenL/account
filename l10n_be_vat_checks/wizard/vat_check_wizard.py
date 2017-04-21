@@ -154,7 +154,7 @@ class be_vat_checks(models.TransientModel):
         balance_57 = round(self.get_balance_for_domain(domain_57), 2)
         balance_85 = round(self.get_balance_for_domain(domain_85), 2)
         balance_87 = round(self.get_balance_for_domain(domain_87), 2)
-        if (balance_56 + balance_57 <= round(((balance_85 + balance_87) * 0.21), 2)):
+        if (balance_56 + balance_57 <= ((balance_85 + balance_87) * 0.21)):
             text += "   => OK\n"
         else:
             text += "   => ERROR\n"
