@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+            id="action_report_profit_and_loss"
+            model="report.profit.and.loss.detail"
+            string="Report Profit and Loss"
+            report_type="qweb-pdf"
+            name="report_profit_and_loss.report_profitandloss"
+            file="report_profit_and_loss.report_profitandloss"
+            menu="False"
+        />
+        
+        <record id="paperformat_default_with_landscape" model="report.paperformat">
+           <field name="name">Default with Landscape</field>
+           <field name="orientation">Landscape</field>
+        </record>
+
+        <record id="action_report_profit_and_loss" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_default_with_landscape"/>
+        </record>   
+            
+        <template id="report_profitandloss">
+            <t t-call="report.html_container">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Profit and Loss</h2>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-xs-4">
+                                <strong>Company Name:</strong>
+                                <p t-esc="data['form']['company_name']"/>
+                            </div>
+                            <div class="col-xs-4">
+                                <strong>Start date:</strong>
+                                <p t-esc="data['form']['date_start']"/>
+                            </div>
+                            <div class="col-xs-4">
+                                <strong>End date:</strong>
+                                <p t-esc="data['form']['date_end']"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <t t-foreach="data['form']['periods']" t-as="periodTitle">
+                                        <th class="text-right"><span t-esc="periodTitle"/></th>
+                                    </t>
+                                    <th class="text-right">Balance</th>
+                                </tr>
+                                <tr>
+                                    <th><span t-esc="data['form']['total']['name']"/></th>
+                                    <t t-foreach="data['form']['total']['periods']" t-as="period">
+                                        <th class="text-right"><span t-esc="docs.format_decimal_number(period['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></th>
+                                    </t>
+                                    <th class="text-right"><span t-esc="docs.format_decimal_number(data['form']['total']['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></th>
+                                </tr>
+                            </thead>    
+                            <tbody>
+                                <t t-foreach="data['form']['codes']" t-as="code">
+                                    <tr>
+                                        <th style="padding-left: 20px;"><span t-esc="code['code']"/>: <span t-esc="code['name']"/></th>
+                                        <t t-foreach="code['periods']" t-as="periodCode">
+                                            <td class="text-right"><span t-esc="docs.format_decimal_number(periodCode['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></td>
+                                        </t>
+                                        <th class="text-right"><span t-esc="docs.format_decimal_number(code['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></th>
+                                    </tr>
+                                    <t t-foreach="code['codes']" t-as="subcode">
+                                        <t t-if="subcode['display'] == True">
+                                            <tr>
+                                                <th style="padding-left: 40px;"><span t-esc="subcode['code']"/>: <span t-esc="subcode['name']"/></th>
+                                                <t t-foreach="subcode['periods']" t-as="periodSubcode">
+                                                    <td class="text-right"><span t-esc="docs.format_decimal_number(periodSubcode['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></td>
+                                                </t>
+                                                <td class="text-right"><span t-esc="docs.format_decimal_number(subcode['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-if="code['code'] == 7">
+                                        <tr>
+                                            <th style="padding-left: 40px;">CATEGORIES</th>    
+                                            <t t-foreach="data['form']['periods']" t-as="periodCategory">
+                                                <th></th>
+                                            </t>
+                                            <th></th>
+                                        </tr>
+                                        <t t-foreach="code['categories']" t-as="category">
+                                            <tr>
+                                                <th style="padding-left: 60px;"><span t-esc="category['name']"/></th>
+                                                <t t-foreach="category['periods']" t-as="periodCategory">
+                                                    <td class="text-right"><span t-esc="docs.format_decimal_number(periodCategory['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></td>
+                                                </t>
+                                                <td class="text-right"><span t-esc="docs.format_decimal_number(category['sum'])"/> <span t-esc="data['form']['currency_symbol']"/></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>
