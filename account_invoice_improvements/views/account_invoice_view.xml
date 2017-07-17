@@ -12,6 +12,10 @@
 				<xpath expr="(//field[@name='origin'])" position="after">
 					<field name="next_invoice_number" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
 				</xpath>
+                <xpath expr="(//field[@name='date'])" position="replace" />
+                <xpath expr="(//field[@name='date_invoice'])" position="after">
+					<field name="date" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]" modifiers="{'readonly': [['state', 'not in', ['draft']]]}"/>
+				</xpath>
 			</field>
 		</record>
 	</data>

@@ -1,6 +1,6 @@
 {
     'name': "AbAKUS invoice improvements",
-    'version': '9.0.1.0.3',
+    'version': '9.0.1.0.4',
     'depends': ['account'],
     'author': "Valentin THIRION & Bernard DELHEZ, AbAKUS it-solutions SARL",
     'website': "http://www.abakusitsolutions.eu",
@@ -19,6 +19,7 @@
         - it adds a filter that filters on supplier accont related move lines on lines
         - it checks if all the lines of the invoices contains exactly one tax
         - it checks if the 'analytic account' field is set
+        - it moves the 'Accounting Date' field close to the 'Date' field
 
     This module has been developed by Valentin THIRION @ AbAKUS it-solution.
     """,
