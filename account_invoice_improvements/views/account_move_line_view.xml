@@ -26,6 +26,7 @@
 					<field name="move_id"/>
 					<field name="debit" sum="Total Debit"/>
 					<field name="credit" sum="Total Credit"/>
+					<field name="balance" sum="Total Balance"/>
 				</field>
 			</field>
 		</record>
