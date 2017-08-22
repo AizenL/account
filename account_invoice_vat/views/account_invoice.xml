@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='reference']" position="after">
-                        <field name="partner_vat"/>
+                        <field name="partner_vat" readonly="True"/>
                     </xpath>
                 </data>
             </field>
