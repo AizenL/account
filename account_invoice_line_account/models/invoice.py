@@ -13,7 +13,12 @@ class AccountInvoiceLine(models.Model):
         if product and product.type != 'service':
             if product.income_analytic_account_id:
                 values['income_analytic_account_id'] = product.income_analytic_account_id.id
-            elif product.categ_id and product.categ_id:
+            elif product.categ_id and product.categ_id and product.categ_id.income_analytic_account_id:
                 values['income_analytic_account_id'] = product.categ_id.income_analytic_account_id.id
+            else
+                values['income_analytic_account_id'] = False
+
+        if values.get('income_analytic_account_id'):
+            _logger.info('\n\n' + values['income_analytic_account_id'] + '\n\n')
 
         return super(AccountInvoiceLine, self).create(values)
