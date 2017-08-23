@@ -10,11 +10,11 @@ class AccountInvoiceLine(models.Model):
     def create(self, values):
         record = super(AccountInvoiceLine, self).create(values)
 
-        if record.product and record.product.type != 'service':
-            if record.product.income_analytic_account_id:
-                record.income_analytic_account_id = record.product.income_analytic_account_id
-            elif record.product.categ_id and record.product.categ_id and record.product.categ_id.income_analytic_account_id:
-                record.income_analytic_account_id = record.product.categ_id.income_analytic_account_id
+        if record.product_id and record.product_id.type != 'service':
+            if record.product_id.income_analytic_account_id:
+                record.income_analytic_account_id = record.product_id.income_analytic_account_id
+            elif record.product_id.categ_id and record.product_id.categ_id and record.product_id.categ_id.income_analytic_account_id:
+                record.income_analytic_account_id = record.product_id.categ_id.income_analytic_account_id
             else:
                 record.income_analytic_account_id = False
 
