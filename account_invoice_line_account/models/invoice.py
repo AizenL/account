@@ -12,6 +12,8 @@ class AccountInvoiceLine(models.Model):
 
         _logger.info('\n\n' + str(product) + '\n\n')
 
+        _logger.info('\n\n' + str(product.type) + '\n\n')
+
         return values
 
     @api.model
