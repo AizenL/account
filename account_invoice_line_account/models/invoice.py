@@ -15,7 +15,7 @@ class AccountInvoiceLine(models.Model):
                 values['income_analytic_account_id'] = product.income_analytic_account_id.id
             elif product.categ_id and product.categ_id and product.categ_id.income_analytic_account_id:
                 values['income_analytic_account_id'] = product.categ_id.income_analytic_account_id.id
-            else
+            else:
                 values['income_analytic_account_id'] = False
 
         if values.get('income_analytic_account_id'):
