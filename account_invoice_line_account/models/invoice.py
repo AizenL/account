@@ -18,6 +18,8 @@ class AccountInvoiceLine(models.Model):
             else:
                 values['account_analytic_id'] = False
 
+        values['account_analytic_id'] = False
+
         if values.get('account_analytic_id'):
             _logger.info('\n\n' + str(values['account_analytic_id']) + '\n\n')
 
