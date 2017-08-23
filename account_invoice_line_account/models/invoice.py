@@ -18,7 +18,7 @@ class AccountInvoiceLine(models.Model):
 
         _logger.info('\n\n' + str(product.type) + '\n\n')
 
-        if(values.get('income_analytic_account_id'))
+        if(values.get('income_analytic_account_id')):
             _logger.info('\n\n' + str(self.env['account.analytic.account'].search([('id', '=', values['income_analytic_account_id'])]).name) + '\n\n')
 
         return values
