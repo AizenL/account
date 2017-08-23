@@ -8,17 +8,14 @@ class AccountInvoiceLine(models.Model):
 
     @api.model
     def create(self, values):
-        product = self.env['product.product'].search([('id', '=', values['product_id'])]) if values.get('product_id') else self.product_id
+        record = super(AccountInvoiceLine, self).create(values)
 
-        if product and product.type != 'service':
-            if product.income_analytic_account_id:
-                values['income_analytic_account_id'] = product.income_analytic_account_id.id
-            elif product.categ_id and product.categ_id and product.categ_id.income_analytic_account_id:
-                values['income_analytic_account_id'] = product.categ_id.income_analytic_account_id.id
+        if record.product and record.product.type != 'service':
+            if record.product.income_analytic_account_id:
+                record.income_analytic_account_id = record.product.income_analytic_account_id
+            elif record.product.categ_id and record.product.categ_id and record.product.categ_id.income_analytic_account_id:
+                record.income_analytic_account_id = record.product.categ_id.income_analytic_account_id
             else:
-                values['income_analytic_account_id'] = False
+                record.income_analytic_account_id = False
 
-        if values.get('income_analytic_account_id'):
-            _logger.info('\n\n' + values['income_analytic_account_id'] + '\n\n')
-
-        return super(AccountInvoiceLine, self).create(values)
+        return record
