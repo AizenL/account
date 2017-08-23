@@ -20,8 +20,6 @@ class AccountInvoiceLine(models.Model):
             else:
                 config_error = True
 
-        config_error = True
-
         record = super(AccountInvoiceLine, self).create(values)
 
         if config_error:
